@@ -1,6 +1,10 @@
 <template>
   <div id="app">
     <div class="container-fluid">
+      <div @click='openMap=!openMap' class="openMap">
+        <i v-if="openMap" class="fa fa-map-marker-alt">CloseMap</i>
+        <i v-else class="fa fa-map-marker-alt">OpenMap</i>
+      </div>
       <div class="row">
         <!-- searchForm -->
         <div class="col-12 col-lg-7">
@@ -85,7 +89,7 @@
               </div>
             </div>
         </div>
-        <div class="col-12 col-lg-5 mapContainer">
+        <div class="col-12 col-lg-5 mapContainer" :class="{'openMap':openMap}">
           <div id="map"></div>
         </div>
       </div>
@@ -93,7 +97,8 @@
   </div>
 </template>
 
-<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 <script>
 
 export default {
@@ -2688,6 +2693,7 @@ export default {
       city: "台北市",
       town: "請選擇鄉鎮市區",
       maskData: "",
+      openMap:false
     };
   },
   mounted() {
@@ -2698,9 +2704,42 @@ export default {
       attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
       maxZoom: 18,
     }).addTo(map);
-    var marker = L.marker([25.052416, 121.30028]);
-    marker.addTo(map);
-   
+
+    //新增綠色標記
+    var orangeIcon = new L.Icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+    //新增黑色標記
+    var blackIcon = new L.Icon({
+      iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
+
+    var markers = new L.MarkerClusterGroup().addTo(map);
+    this.$http.get("https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json").then(res=>{
+      let data = res.data.features
+      for(let i =0;data.length>i;i++){
+      let mask
+        if(data[i].properties.mask_adult == 0 && data[i].properties.mask_child == 0){
+          mask=blackIcon
+        }else{
+          mask=orangeIcon
+        }
+        markers.addLayer(L.marker([data[i].geometry.coordinates[1],data[i].geometry.coordinates[0]], {icon: mask}).bindPopup('<h6>'+data[i].properties.name+'</h6>'+'<p>成人口罩數量:'+data[i].properties.mask_adult+'</p>'+'<p>兒童口罩數量:'+data[i].properties.mask_child+'</p>'));
+      }
+
+      map.addLayer(markers);
+
+    })
   },
   methods: {
     getData() {
@@ -2716,12 +2755,7 @@ export default {
     addMark(item){
       let x = item.geometry.coordinates[0]
       let y = item.geometry.coordinates[1]
-      // var marker = L.marker([y, x])
-      // console.log(marker)
-      
-    var m = L.marker([25.052416, 121.30028]);
-    m.addTo(map);
-      }
+      },
   },
   computed: {
     myData() {

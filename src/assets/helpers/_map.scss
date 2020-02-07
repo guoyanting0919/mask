@@ -3,7 +3,20 @@
   justify-content: center;
   align-items: center;
   #map {
-    width: 100%;
-    height: 70vh;
+    width: 95%;
+    height: 75vh;
+  }
+}
+
+.openMap {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: $colorOrange;
+  cursor: pointer;
+  z-index: 3;
+
+  i {
+    margin-right: 5px;
   }
 }
