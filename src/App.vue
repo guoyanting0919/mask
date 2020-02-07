@@ -49,7 +49,7 @@
           <!-- storeData -->
             <div class="storeData container" v-if="maskData">
               <div class="row storeDataFlex">
-                <div v-for="(item,index) in myData" :key="index" class="col-md-5 col-12 store">
+                <div @click="addMark(item)" v-for="(item,index) in myData" :key="index" class="col-md-5 col-12 store">
 
                   <h3 class="storeName">
                     {{item.properties.name}}
@@ -85,13 +85,17 @@
               </div>
             </div>
         </div>
-        <div class="col-12 col-lg-5">bbb</div>
+        <div class="col-12 col-lg-5 mapContainer">
+          <div id="map"></div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
+<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"></script>
 <script>
+
 export default {
   name: "app",
   data() {
@@ -2686,6 +2690,18 @@ export default {
       maskData: "",
     };
   },
+  mounted() {
+    let map
+    map = L.map('map').setView([25.052416, 121.30028], 10);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
+      maxZoom: 18,
+    }).addTo(map);
+    var marker = L.marker([25.052416, 121.30028]);
+    marker.addTo(map);
+   
+  },
   methods: {
     getData() {
       const vm = this;
@@ -2696,7 +2712,16 @@ export default {
         .then(res => {
           vm.maskData = res.data.features;
         });
-    }
+    },
+    addMark(item){
+      let x = item.geometry.coordinates[0]
+      let y = item.geometry.coordinates[1]
+      // var marker = L.marker([y, x])
+      // console.log(marker)
+      
+    var m = L.marker([25.052416, 121.30028]);
+    m.addTo(map);
+      }
   },
   computed: {
     myData() {
@@ -2746,4 +2771,5 @@ export default {
 
 <style lang="scss">
   @import './assets/all.scss';
+   
 </style>
