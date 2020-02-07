@@ -15,10 +15,25 @@
   .store {
     box-sizing: border-box;
     border: 2px solid $colorOrange;
+    transition: 0.5s;
     border-radius: 10px;
     margin: 15px;
     padding: 10px 20px;
     font-family: $chineseFont;
+
+    &:hover .rightIcon {
+      transform: translateX(10px);
+      text-shadow: 0 0 10px $colorOrange;
+    }
+
+    &:hover {
+      box-shadow: 0 0 10px $colorOrange;
+      transform: translateY(-5px);
+    }
+
+    &:hover .storeName {
+      text-shadow: 0 0 10px $colorOrange;
+    }
 
     .storeName {
       color: $colorOrange;
@@ -26,15 +41,24 @@
       font-weight: 300;
       letter-spacing: 2px;
       margin-bottom: 10px;
+      pointer-events: none;
+      transition: 0.5s;
+
+      i {
+        font-size: 20px;
+        transition: 0.5s;
+      }
     }
 
     .storeAddress,
     .storePhone,
     .storeUpdated {
+      pointer-events: none;
       margin: 0;
       color: $colorOrange;
       font-weight: 300;
       letter-spacing: 1px;
+      font-size: 16px;
     }
 
     .storePhone {
@@ -50,6 +74,7 @@
     .adultMask,
     .chileMask {
       @include size(100%, 100px);
+      pointer-events: none;
       padding: 8px;
       background-color: $colorOrange;
       border-radius: 10px;

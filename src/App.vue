@@ -6,7 +6,7 @@
         <div class="col-7">
           <!-- formGroup -->
           <div class="row formGroup mt-3">
-            <h5 class="col-12 formTitle">依縣市搜尋</h5>
+            <h5 class="col-12 formTitle">依縣市搜尋<i class="fa fa-search"></i></h5>
             <div class="col-6">
               <div class="form-group">
                 <select @change="town='請選擇鄉鎮市區'" v-model="city" class="form-control" id="city">
@@ -51,9 +51,15 @@
               <div class="row storeDataFlex">
                 <div v-for="(item,index) in myData" :key="index" class="col-5 store">
 
-                  <h3 class="storeName">{{item.properties.name}}</h3>
-                  <p class="storeAddress">地址:{{item.properties.address}}</p>
-                  <p class="storePhone">電話:{{item.properties.phone}}</p>
+                  <h3 class="storeName">
+                    {{item.properties.name}}
+                    <i class="fa fa-angle-double-right rightIcon"></i></h3>
+                  <p class="storeAddress">
+                    <i class="fa fa-home"></i>
+                    {{item.properties.address}}</p>
+                  <p class="storePhone">
+                    <i class="fa fa-phone"></i>
+                    {{item.properties.phone}}</p>
                   <!-- 剩餘口罩 -->
                   <div class="row">
                     <div class="col-6">
