@@ -10,9 +10,11 @@
   .storeDataFlex {
     justify-content: space-around;
     align-items: stretch;
+    margin: 0;
   }
 
   .store {
+    cursor: pointer;
     box-sizing: border-box;
     border: 2px solid $colorOrange;
     transition: 0.5s;
@@ -92,7 +94,7 @@
 
       h4 {
         color: $colorBlack;
-        font-size: 3em;
+        font-size: 2.5em;
         font-weight: 700;
 
         span {

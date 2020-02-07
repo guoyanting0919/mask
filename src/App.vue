@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <!-- searchForm -->
-        <div class="col-7">
+        <div class="col-12 col-lg-7">
           <!-- formGroup -->
           <div class="row formGroup mt-3">
             <h5 class="col-12 formTitle">依縣市搜尋<i class="fa fa-search"></i></h5>
@@ -49,7 +49,7 @@
           <!-- storeData -->
             <div class="storeData container" v-if="maskData">
               <div class="row storeDataFlex">
-                <div v-for="(item,index) in myData" :key="index" class="col-5 store">
+                <div v-for="(item,index) in myData" :key="index" class="col-md-5 col-12 store">
 
                   <h3 class="storeName">
                     {{item.properties.name}}
@@ -85,7 +85,7 @@
               </div>
             </div>
         </div>
-        <div class="col-5">bbb</div>
+        <div class="col-12 col-lg-5">bbb</div>
       </div>
     </div>
   </div>
