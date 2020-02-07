@@ -1,0 +1,80 @@
+.storeData {
+  width: 100%;
+  max-height: 70vh;
+  background-color: $colorBlack;
+  overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  padding-top: 0;
+
+  .storeDataFlex {
+    justify-content: space-around;
+    align-items: stretch;
+  }
+
+  .store {
+    box-sizing: border-box;
+    border: 2px solid $colorOrange;
+    border-radius: 10px;
+    margin: 15px;
+    padding: 10px 20px;
+    font-family: $chineseFont;
+
+    .storeName {
+      color: $colorOrange;
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .storeAddress,
+    .storePhone,
+    .storeUpdated {
+      margin: 0;
+      color: $colorOrange;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .storePhone {
+      margin-bottom: 10px;
+    }
+
+    .storeUpdated {
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .adultMask,
+    .chileMask {
+      @include size(100%, 100px);
+      padding: 8px;
+      background-color: $colorOrange;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+
+      p {
+        color: $colorBlack;
+        padding-bottom: 3px;
+        margin: 0;
+        border-bottom: 2px solid black;
+      }
+
+      h4 {
+        color: $colorBlack;
+        font-size: 3em;
+        font-weight: 700;
+
+        span {
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}

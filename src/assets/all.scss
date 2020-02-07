@@ -1,1 +1,6 @@
-@import url('./helpers/_left.scss');
+@import './helpers/mixin';
+@import './helpers/variables';
+
+@import './helpers/scrollBar';
+@import './helpers/searchForm';
+@import './helpers/storeData';

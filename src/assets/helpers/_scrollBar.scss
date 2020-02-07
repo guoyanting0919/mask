@@ -1,0 +1,15 @@
+::-webkit-scrollbar {
+  //整停sb寬度
+  width: 7px;
+}
+::-webkit-scrollbar-track {
+  //軌道樣式
+  background-color: $colorBlack;
+  margin-top: 10px;
+}
+::-webkit-scrollbar-thumb {
+  //sb樣式
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: $colorOrange;
+}

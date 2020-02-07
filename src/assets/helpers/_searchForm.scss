@@ -1,0 +1,45 @@
+#app {
+  @include size(100%, 100vh);
+  background-color: $colorBlack;
+
+  .formGroup {
+    height: 25vh;
+    padding: 20px;
+
+    .formTitle {
+      font-family: $chineseFont;
+      font-size: 28px;
+      color: $colorOrange;
+      letter-spacing: 2px;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin: 0;
+    }
+
+    .form-control {
+      background-color: $colorOrange;
+      font-family: $chineseFont;
+      border: none;
+      color: $colorBlack;
+      font-size: 20px;
+    }
+
+    .formTxt {
+      color: $colorOrange;
+      font-family: $chineseFont;
+      margin: 0;
+      letter-spacing: 1px;
+      font-size: 16px;
+      text-align: center;
+      font-weight: 300;
+      margin-top: 16px;
+
+      span {
+        font-size: 20px;
+      }
+    }
+  }
+}

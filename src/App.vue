@@ -1,10 +1,12 @@
 <template>
   <div id="app">
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-6">
-          <h5>縣市搜尋</h5>
-          <div class="row">
+        <!-- searchForm -->
+        <div class="col-7">
+          <!-- formGroup -->
+          <div class="row formGroup mt-3">
+            <h5 class="col-12 formTitle">依縣市搜尋</h5>
             <div class="col-6">
               <div class="form-group">
                 <select @change="town='請選擇鄉鎮市區'" v-model="city" class="form-control" id="city">
@@ -41,20 +43,43 @@
                 </select>
               </div>
             </div>
-            <div class="storeInfo container" v-if="maskData">
-              <div class="row">
-                <div v-for="(item,index) in myData" :key="index" class="col-6 store">
+            <p class="col-12 formTxt" v-if="maskData">
+              -該地區共 <span>{{myData.length}}</span> 家藥局尚有剩餘口罩-</p>
+          </div>
+          <!-- storeData -->
+            <div class="storeData container" v-if="maskData">
+              <div class="row storeDataFlex">
+                <div v-for="(item,index) in myData" :key="index" class="col-5 store">
 
-                  <h3>{{item.properties.name}}</h3>
-                  <h4>成人口罩剩餘:{{item.properties.mask_adult}}個</h4>
-                  <h4>兒童口罩剩餘:{{item.properties.mask_child}}個</h4>
-
+                  <h3 class="storeName">{{item.properties.name}}</h3>
+                  <p class="storeAddress">地址:{{item.properties.address}}</p>
+                  <p class="storePhone">電話:{{item.properties.phone}}</p>
+                  <!-- 剩餘口罩 -->
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="adultMask">
+                        <p>成人口罩</p>
+                        <h4>
+                          {{item.properties.mask_adult}}<span>個</span> 
+                        </h4>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="chileMask">
+                        <p>兒童口罩</p>
+                        <h4>
+                          {{item.properties.mask_child}}<span>個</span> 
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <p class="storeUpdated">最後更新時間{{item.properties.updated}}</p>
                 </div>
               </div>
             </div>
-          </div>
         </div>
-        <div class="col-6">bbb</div>
+        <div class="col-5">bbb</div>
       </div>
     </div>
   </div>
@@ -65,7 +90,6 @@ export default {
   name: "app",
   data() {
     return {
-      maskData: "",
       areaData: [
   {
     "zip_code": "100",
@@ -2652,7 +2676,8 @@ export default {
   }
 ],
       city: "台北市",
-      town: "請選擇鄉鎮市區"
+      town: "請選擇鄉鎮市區",
+      maskData: "",
     };
   },
   methods: {
@@ -2708,10 +2733,11 @@ export default {
   },
   created() {
     this.getData();
+    
   }
 };
 </script>
 
 <style lang="scss">
-@import url("./assets/all.scss");
+  @import './assets/all.scss';
 </style>
