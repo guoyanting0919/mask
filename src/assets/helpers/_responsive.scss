@@ -4,12 +4,14 @@
     position: absolute !important;
     top: 40px;
     transform: translateX(-100%);
+    opacity: 0;
     &.openMap {
       transform: translateX(0);
+      opacity: 1;
     }
   }
   #map {
-    height: 92vh !important;
+    height: 90vh !important;
   }
 }
 
@@ -25,6 +27,14 @@
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .openMap {
     display: none;
+  }
+  .storeData .store .adultMask p,
+  .storeData .store .chileMask p {
+    font-size: 14px;
+  }
+  .storeData .store .adultMask h4,
+  .storeData .store .chileMask h4 {
+    font-size: 20px;
   }
 }
 
