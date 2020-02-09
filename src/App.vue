@@ -116,10 +116,9 @@
   </div>
 </template>
 
-<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 <script>
 import Loader from "../src/components/Loader";
+
 export default {
   name: "app",
   components: {
@@ -2716,98 +2715,32 @@ export default {
       town: "請選擇鄉鎮市區",
       maskData: "",
       openMap: false,
-      isLoading: false
+      isLoading: false,
+      map: null,
+      OSMUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     };
   },
   mounted() {
     const vm = this;
-    let lat;
-    let lon;
-
     vm.isLoading = true;
-    let map;
-    map = L.map("map").setView([24.052416, 120.30028], 7);
-
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '<a href="https://www.openstreetmap.org/">OSM</a>',
-      maxZoom: 18
-    }).addTo(map);
-
-    //取得使用者位置
-    navigator.geolocation.getCurrentPosition(function(position) {
-      lat = position.coords.latitude;
-      lon = position.coords.longitude;
-      L.marker([lat, lon])
-        .addTo(map)
-        .bindPopup("你的位置")
-        .openPopup();
-    });
-
-    //新增綠色標記
-    var orangeIcon = new L.Icon({
-      iconUrl:
-        "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png",
-      shadowUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-    //新增黑色標記
-    var blackIcon = new L.Icon({
-      iconUrl:
-        "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png",
-      shadowUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-
-    var markers = new L.MarkerClusterGroup().addTo(map);
+    this.map = this.$utils.map.createMap("map", { maxZoom: 18 });
+    // 加載OSM
+    this.$utils.map.createTileLayer(this.map, this.OSMUrl, {});
+    //設定中心點
+    this.map.setView([24.052416, 120.30028], 7);
+    //獲取數據
     this.$http
       .get(
         "https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json"
       )
       .then(res => {
         let data = res.data.features;
-        for (let i = 0; data.length > i; i++) {
-          let mask;
-          if (
-            data[i].properties.mask_adult == 0 &&
-            data[i].properties.mask_child == 0
-          ) {
-            mask = blackIcon;
-          } else {
-            mask = orangeIcon;
-          }
-          markers.addLayer(
-            L.marker(
-              [
-                data[i].geometry.coordinates[1],
-                data[i].geometry.coordinates[0]
-              ],
-              { icon: mask }
-            ).bindPopup(
-              "<h6>" +
-                data[i].properties.name +
-                "</h6>" +
-                "<p>成人口罩數量:" +
-                data[i].properties.mask_adult +
-                "</p>" +
-                "<p>兒童口罩數量:" +
-                data[i].properties.mask_child +
-                "</p>"
-            )
-          );
-        }
-
-        map.addLayer(markers);
+        const cluster = vm.setMaskMakers(data);
+        vm.map.addLayer(cluster);
         vm.isLoading = false;
       });
   },
+
   methods: {
     getData() {
       const vm = this;
@@ -2820,9 +2753,44 @@ export default {
         });
     },
     addMark(item) {
+      window.innerWidth > 500 ? (this.openMap = false) : (this.openMap = true);
+
       let x = item.geometry.coordinates[0];
       let y = item.geometry.coordinates[1];
-      // console.log(L.marker([23, 121]).addTo());
+      this.map.flyTo([y, x], 18);
+    },
+    setMaskMakers(data) {
+      const cluster = this.$utils.map.createMakerCluster();
+      data.forEach(element => {
+        let popup = this.$utils.map.createPopup({
+          maxWidth: 300,
+          minWidth: 200,
+          className: "map-popup"
+        });
+        popup.setContent(
+          `<h5>${element.properties.name}</h5>
+          <p>電話：${element.properties.phone}</p>
+          <div>
+            地址：
+            <a target="_blank" href="https://www.google.com.tw/maps/place/${
+              element.properties.address
+            }">${element.properties.address}</a>
+          </div>
+          <div class="hr"></div>
+          <div>
+            <div>成人口罩：${element.properties.mask_adult}個</div>
+            <div>兒童口罩：${element.properties.mask_child}個</div>
+          </div>
+          <p>更新時間：${element.properties.updated || "未知"}</p>`
+        );
+        const marker = this.$utils.map.createMakerByXY(
+          element.geometry.coordinates
+        );
+        //綁popup
+        marker.bindPopup(popup);
+        cluster.addLayer(marker);
+      });
+      return cluster;
     }
   },
   computed: {

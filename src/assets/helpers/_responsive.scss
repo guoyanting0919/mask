@@ -12,6 +12,7 @@
   }
   #map {
     height: 90vh !important;
+    margin-top: 0 !important;
   }
 }
 
@@ -35,6 +36,13 @@
   .storeData .store .adultMask h4,
   .storeData .store .chileMask h4 {
     font-size: 20px;
+  }
+
+  .mapContainer {
+    transform: translateX(0);
+    &.openMap {
+      transform: translateX(0) !important;
+    }
   }
 }
 
